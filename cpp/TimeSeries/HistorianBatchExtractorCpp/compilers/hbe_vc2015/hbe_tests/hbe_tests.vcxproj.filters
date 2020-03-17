@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="tests">
+      <UniqueIdentifier>{f325e1d3-f889-42c0-b6f4-38a08f6ca7f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{6b6ec6ec-1605-41c3-beb2-88c67e680abe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\hbe_tests\misc_tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_tests\tags_tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_tests\data_tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\connection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\data_query.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\log_factory.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\misc.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\raw_value.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\tags_file.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\tags_query.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\hbe_exe\connection.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\data_query.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\exception.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\historian.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\log.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\log_factory.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\misc.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\raw_value.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_file.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_query.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_extractor.hpp">
+      <Filter>sources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\README.md">
+      <Filter>sources</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

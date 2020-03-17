@@ -1,0 +1,86 @@
+J'ai créé un user gratienj sur islin-hdpmas1.ifp.fr
+User : gratienj
+Pwd : ifpen2019 !
+Pour bien faire, il faudrait également que je le fasse sur le nod1, le nod2 et le nod3. Je te dirai une fois que cela est OK.
+Pour l'instant l'infrastructure EvoA (le cluster composé des serveurs suivants : islin-hdpmas1.ifp.fr, islin-hdpnod1.ifp.fr, islin-hdpnod2.ifp.fr, islin-hdpnod3.ifp.fr) n'est pas sur LDAP, pas géré par ECN, ... On est vraiment libre dessus, il faut voir cette infra comme un Bac à Sable pour apprendre... Alors évidement il faut faire attention parce qu'on a les privilèges root, voire le compte root.
+Sur le LAB qui est en cours d'installation les choses seront différentes, et nous nous conformerons plus  à la politique sécurité de l'entreprise...
+ 
+Documentations disponible à plusieurs endroits :
+Prisme : Espace documentaire du projet EvoA : ici
+Gitlab : https://gitlab.ifpen.fr/F0630/Cluster_EvoA
+ 
+Pour répondre à tes questions et demandes :
+ 
+Management du cluster
+Ambari : http://islin-hdpmas1.ifp.fr:8080/#/login
+User : gratienj
+Pwd : gratienj2019!
+Privilège : cluster User pour l'instant, je peux upgrader si besoin
+ 
+ 
+Zeppelin
+URL :  http://islin-hdpmas1.ifp.fr:9995/#/
+User : gratienj
+Pwd : gratienj2019!
+ 
+ 
+MongoDB
+User : gratienj
+Pwd : gratienj2019!
+ 
+Si tu as besoin, tu peux utiliser le compte admin (pour étendre tes droits ou créer d’autres users):
+
+    user : adminUser
+    mot de passe : 7T5ksdzk0U0pLCr4PseU
+
+ 
+Pour accéder à mongoDB en ligne de commande sur le cluster, tu peux saisir tout simplement la commande "mongo" sur islin-hdpnod1.ifp.fr
+
+Voici un petit tuto qui te permettra de débuter avec MongoDB si tu le souhaites : http://dridk.me/MongoDB.html
+Aussi, contrairement à ArangoDB par exemple, Mongo n'est pas nativement packagé avec une solution GUI . Donc pour interagir avec Mongo via une interface graphique il faut en installer une. Il y en plusieurs (https://www.guru99.com/top-20-mongodb-tools.html), j'ai testé la solution "MongoDB Compass" (https://www.mongodb.com/products/compass) qui est celle développée par l'équipe Mongo et qui s'installe facilement comme une application desktop.
+
+Voici un screenshot de comment se connecter à MongoDB avec l'outil "MongoDB Compass" :
+Hostname : islin-hdpnod1.ifp.fr
+Port : 27017
+
+
+Une fois connecté, voici l'interface obtenue permettant de visualiser les databases, collections, ... et de faire différentes requêtes :
+
+
+
+Il est fortement déconseillé de modifier le contenu des databases "admin", "config" et "local".
+Nous verrouillerons, pour une utilisation plus grande échelle, l'accès à ces bases en créant des user spécifiques, mais pour le moment il faut faire attention.
+
+***********************************************
+
+Pour info ci-dessous les notes d'installation de ce cluster, que j'intègrerai plus tard aux documentations officielles :
+
+Connexion sur le clusteur :
+Pour Islin-hdpmas1.ifp.fr, Islin-hdpnod1.ifp.fr, Islin-hdpnod2.ifp.fr, Islin-hdpnod3.ifp.fr le user est root et le mdp est ifpen2017 !
+ 
+Docs utiles :
+
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
+https://docs.mongodb.com/manual/replication/
+https://docs.mongodb.com/manual/tutorial/deploy-replica-set/
+https://docs.mongodb.com/manual/reference/configuration-options/#replication-options
+https://docs.mongodb.com/manual/reference/parameters/#replication-parameters
+https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
+https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/
+
+Architecture :
+
+Mas1 : Arbiter only
+Nod1, Nod2, Nod3 : holds data
+ 
+ 
+J’espère que cela te convient. En échange je te demande 3 choses : J
+
+    Ne diffuse pas ce mail car il contient les mots de passe du cluster/mongo/Ambari/…. !
+    Fais attention aux éléments déjà dans mongoDB, vous êtes plusieurs utilisateurs avec de comptes aux droits étendus…
+    Tiens-moi au courant de ce que tu fais sur le cluster/mongo
+
+ 
+PS si tu as besoin d’un compte sur ArangoDB keep me posted !
+ 
+Pascal 

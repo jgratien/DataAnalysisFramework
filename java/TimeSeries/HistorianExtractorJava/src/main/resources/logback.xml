@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <property name="LOG_PATH" value="d:/tmp/historian_extractor"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/historian-extractor.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="liquibase" level="WARN"/>
+    <logger name="fr.ifpen.historian" level="DEBUG"/>
+    <logger name="fr.ifpen.historian.config" level="DEBUG"/>
+
+    <!-- Strictly speaking, the level attribute is not necessary since -->
+    <!-- the level of the root level is set to DEBUG by default.       -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>

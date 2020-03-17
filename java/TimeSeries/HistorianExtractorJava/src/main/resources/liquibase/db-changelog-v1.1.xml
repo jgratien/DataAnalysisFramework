@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="db-update-table-v1.1.0" author="tad">
+        <!-- Ajout d'une colonne pour le nb d'essais -->
+        <addColumn tableName="log_extraction">
+            <column name="nbTry" type="integer" defaultValueNumeric="1"/>
+        </addColumn>
+
+        <!-- et les compteurs dans les stats -->
+        <addColumn tableName="log_day">
+            <column name="nbExtractionAbandoned" type="integer" defaultValueNumeric="0"/>
+        </addColumn>
+        <addColumn tableName="log_hour">
+            <column name="nbExtractionAbandoned" type="integer" defaultValueNumeric="0"/>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

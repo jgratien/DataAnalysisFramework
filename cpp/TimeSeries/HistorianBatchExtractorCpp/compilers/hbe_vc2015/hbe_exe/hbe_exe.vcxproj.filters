@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\hbe_exe\batch_extractor.cpp" />
+    <ClCompile Include="..\..\..\hbe_exe\connection.cpp">
+      <Filter>historian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\data_query.cpp">
+      <Filter>historian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\raw_value.cpp">
+      <Filter>historian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\tags_query.cpp">
+      <Filter>historian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\misc.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\tags_file.cpp">
+      <Filter>historian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\hbe_exe\main.cpp" />
+    <ClCompile Include="..\..\..\hbe_exe\log_factory.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\hbe_exe\connection.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\data_query.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\raw_value.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_query.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\exception.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\misc.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_file.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\historian.hpp" />
+    <ClInclude Include="..\..\..\hbe_exe\batch_extractor.hpp" />
+    <ClInclude Include="..\..\..\hbe_exe\log.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\log_factory.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\hbe_exe\tags_extractor.hpp">
+      <Filter>historian</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="historian">
+      <UniqueIdentifier>{c69a9e00-494a-42c1-bc58-ef2b4c7878d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{e99ea284-0658-4302-bc6b-692830a8b90f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="db-create-table-v1.0.0" author="tad">
+        <!--
+        Tables log
+        -->
+        <createTable tablespace="${tableTS}" tableName="log_extraction">
+            <column name="server" type="${fieldNameShort}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dateTime" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start" type="datetime" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end" type="datetime"/>
+            <column name="duration" type="${bigDecimal}"/>
+            <column name="dataFile" type="${fieldNameLong}"/>
+            <column name="extractionSuccess" type="boolean"/>
+            <column name="fileTransferSuccess" type="boolean"/>
+        </createTable>
+
+        <addPrimaryKey tablespace="${indexTS}"
+                       constraintName="pk_log_extraction"
+                       tableName="log_extraction"
+                       columnNames="server,dateTime"/>
+
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_server"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="server" type="${fieldNameShort}"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_dateTime"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="dateTime" type="datetime"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_start"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="start" type="datetime"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_end"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="end" type="datetime"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_extractionSuccess"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="extractionSuccess" type="boolean"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_extraction_fileTransfertSucces"
+                     tableName="log_extraction"
+                     unique="false">
+            <column name="fileTransferSuccess" type="boolean"/>
+        </createIndex>
+        
+        <createTable tablespace="${tableTS}" tableName="log_hour">
+            <column name="server" type="${fieldNameShort}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hour" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nbExtractionSuccess" type="integer"/>
+            <column name="nbExtractionError" type="integer"/>
+            <column name="nbExtractionMissing" type="integer"/>
+            <column name="nbFileTransferSuccess" type="integer"/>
+            <column name="nbFileTransferError" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey tablespace="${indexTS}"
+                       constraintName="pk_log_hour"
+                       tableName="log_hour"
+                       columnNames="server,hour"/>
+
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_hour_server"
+                     tableName="log_hour"
+                     unique="false">
+            <column name="server" type="${fieldNameShort}"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_hour_hour"
+                     tableName="log_hour"
+                     unique="false">
+            <column name="hour" type="datetime"/>
+        </createIndex>
+
+        <createTable tablespace="${tableTS}" tableName="log_day">
+            <column name="server" type="${fieldNameShort}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="day" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nbExtractionSuccess" type="integer"/>
+            <column name="nbExtractionError" type="integer"/>
+            <column name="nbExtractionMissing" type="integer"/>
+            <column name="nbFileTransferSuccess" type="integer"/>
+            <column name="nbFileTransferError" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey tablespace="${indexTS}"
+                       constraintName="pk_log_day"
+                       tableName="log_day"
+                       columnNames="server,day"/>
+
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_day_server"
+                     tableName="log_day"
+                     unique="false">
+            <column name="server" type="${fieldNameShort}"/>
+        </createIndex>
+        <createIndex tablespace="${indexTS}"
+                     indexName="idx_log_day_day"
+                     tableName="log_day"
+                     unique="false">
+            <column name="day" type="date"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

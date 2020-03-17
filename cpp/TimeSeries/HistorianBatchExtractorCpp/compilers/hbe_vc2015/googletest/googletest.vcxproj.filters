@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)..\..\auxiliaries\googletest\googletest-master\googletest\src\gtest-all.cc" />
+    <ClCompile Include="$(SolutionDir)..\..\auxiliaries\googletest\googletest-master\googletest\src\gtest_main.cc" />
+  </ItemGroup>
+</Project>

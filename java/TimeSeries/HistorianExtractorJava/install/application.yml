@@ -1,0 +1,106 @@
+﻿welcomeMessage: Historian Extractor for Hadoop ChroniX is running !
+
+# extraction interval in seconds (we made a request every 60s, this request ask for data between <start> and <start> + 60s)
+extractionInterval: 60
+# extraction delay in seconds (we wait 10s to run request in order to have available data in historian)
+extractionRunDelay: 10
+# max retry in case of systematic error of historian (typically for the loose of 1 hour when passing in summer time)
+maxExtractionRetry: 5
+# local directory for data files
+dataDirectory: L:/appli/historian_extractor/data
+# delay in seconds for executing automatic missing data retrieve action (only unsuccessful ones)
+# disabled if set to 0, set few seconds of rest (sleep) for server (2 to 20 seems good idea)
+automaticDataRetrieveDelay: 3
+# delay in seconds for executing automatic file transfer action (only unsuccessful ones)
+# disabled if set to 0, set few seconds of rest (sleep) for server (2 to 20 seems good idea)
+automaticFileTransferDelay: 17
+# nb max of requests made when launching RETRIEVE mode (truncate made if requests to be done between start and end date are greater than maxRetrieveRequests)
+maxRetrieveRequests: 50
+# nb of requests running in parallel when launching RETRIEVE mode
+parallelRetrieveRequests: 5
+# with debug = true, we don't do any request to historian servers
+# they all are simulated with random duration (about 1 minutes), and systematic fails between 5h10 an 5h15
+debug: false
+# retention period in days (for logs and stat in db, for files and for retrieve possibility)
+retentionPeriods:
+  # 10 days of files represents almost 20Go
+  files: 10
+  # one year of stats seems enough
+  db: 365
+# in case of COM Exception, we think the service can not recover stable comportment, so we kill it
+killOnCOMException: true
+
+historian:
+  # connection to historians servers
+  provider: ihOLEDB.iHistorian.1
+  persistSecurityInfo: false
+  userId:
+  password:
+  mode: Read
+  # batch C extraction program
+  batchExtraction:
+    # C++ program using Historian C API for data reading
+    program: L:/appli/historian_extractor/c_api/hbe_exe.exe
+    # customizable logs for C++ program
+    logFile: L:/appli/historian_extractor/c_api/log4cpp.properties
+    # we wait 2 minutes max for one server extraction
+    timeOutExtract: 120
+  maxTags: 2500 # max tags for one tag list request
+  maxQueries: 10 # max request loop for getting all tags (security => 25000 tags seems enough)
+  servers:
+    - name: ISNTS35-N
+      checkTagsDelay: 7200 # check if new tags have been added every 2 hours
+      tagsMethod: C_API # use ODBC or C_API to retrieve tag list
+      tagsSelections: # list of tags selection (format where clause historian on tagname : can be one value '*' for all tags)
+        - '*'
+    - name: ISNTS29-N
+      checkTagsDelay: 7200 # check if new tags have been added every 2 hours
+      tagsMethod: C_API # use ODBC or C_API to retrieve tag list
+      tagsSelections:
+        - '*'
+  requests:
+    tagList: SELECT TOP {MAX_TAGS} TAGNAME FROM ihTags, ihCollectors WHERE ihCollectors.CollectorName = ihTags.CollectorName AND ihCollectors.Status = 'Running' AND {TAGSELECT} ORDER BY TAGNAME
+
+# local database to store report log and statistic of extraction and transfer
+database:
+#  url: jdbc:h2:mem:historian_extractor;DB_CLOSE_DELAY=-1
+  url: jdbc:h2:file:./h2db/historian_extractor;AUTO_SERVER=true;DB_CLOSE_DELAY=60
+  username: historian_extractor
+  password:
+  prepStmtCacheSize: 250
+  prepStmtCacheSqlLimit: 2048
+  cachePrepStmts: true
+
+ftps:
+  # DEV cluster
+  - host: islin-hdpmas1
+    port: 22
+    username: root
+    password: ifpen2017!
+    # enable or disable the file transfer to extractor cluster
+    enabled: true
+    # remote directory (on extractor cluster) to put files
+    hostBaseDirectory: /disk2/data/dropzone/historian
+    # Using String.format(<hostDirectoryPattern>, server, datetime)
+    # le x$ sert à préciser le paramètre (x = 1 : server, x = 2 : datetime)
+    # le s vaut pour les chaines de caractères, tY, tm pour les dates (année, mois)
+    # cf https://dzone.com/articles/java-string-format-examples
+    hostDirectoryPattern: "%1$s-%2$tY-%2$tm"
+    # option of SFTP protocol
+    strictHostKeyChecking: no
+  # PRODUCTION cluster
+  - host: islin-hdpledg01.ifp.fr
+    port: 22
+    username: ftphisto
+    password: ifpen2019!
+    # enable or disable the file transfer to extractor cluster
+    enabled: true
+    # remote directory (on extractor cluster) to put files
+    hostBaseDirectory: /disk3/data/dropzone/historian
+    # Using String.format(<hostDirectoryPattern>, server, datetime)
+    # le x$ sert à préciser le paramètre (x = 1 : server, x = 2 : datetime)
+    # le s vaut pour les chaines de caractères, tY, tm pour les dates (année, mois)
+    # cf https://dzone.com/articles/java-string-format-examples
+    hostDirectoryPattern: "%1$s-%2$tY-%2$tm"
+    # option of SFTP protocol
+    strictHostKeyChecking: no
