@@ -10,7 +10,44 @@
 
 
 # Installation des dépendances en commun
+### Pour installer `Anaconda3` : 
+Télécharger le script (python 3.7) pour linux dans le [download page officiel](https://www.anaconda.com/distribution/#download-section). 
+Exécuter le bash avec ligne commande : 
+```bash
+> sh Anaconda3-2019.03-Linux-x86_64.sh
+```
+Taper "yes" pour accepter la licence et préciser la location d'installation pour anaconda. 
+Le script va modifier le contenu dans ~/.bashrc, donc il faut activer anaconda avec ligne command après l'installation:
+```bash
+> source ~/.bashrc
+```
+#### Tester anaconda
+```bash
+> conda list
+```
+### Pour installer `Kafka` : 
+Télécharger l'archive et le désarchiver avec ligne commande suivante : 
+```bash
+> wget http://apache.crihan.fr/dist/kafka/2.4.1/kafka_2.12-2.4.1.tgz
+> tar -xzfv kafka_2.12-2.4.1.tgz
+```
+Aller dans le répertoire `config` et configurer les fichiers.
+* Dans le fichier `server.properties` : 
+1. log.dirs=/home/ymo/local/var/kafka/logs 
+2. zookeeper.connect=localhost:2181 (la porte par défaut est 2181, à modifier si besoin)
+* Dans le fichier `zookeeper.properties` :
+1. dataDir=/home/ymo/local/var/kafka/zookeeper
+2. clientPort=2181 (la porte par défaut est 2181, à modifier si besoin)
 
+#### Tester le service kafka
+ - kafka zookeeper : 
+```bash
+> bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+ - kafka service
+```bash
+> bin/kafka-server-start.sh config/server.properties
+```
 ## Information du système global :
 | Nom | Version |
 | ---- | ----:|
@@ -18,9 +55,11 @@
 | jre | 1.8.0_222-ea|
 | python | 3.7.6 |
 
- ### Information des dépendances en commun :
+### Information des dépendances en commun :
  | Nom | Version |
 | ---- | ----:|
+| Anaconda3 | 2020.02 | 
+| Kafka | 2.4.1 |
 | jeager | 1.17.0 |
 
 > `jeager` est une solution globale et faisable pour évaluer tous les types de bases de données. C'est une extension qui collabore avec les codes python et affiche les résultats dans un Web UI.
@@ -55,7 +94,7 @@ python -m pip install pymongo
 >Pour vérifier les données dans mongoDB, [`mongo-compass`](https://www.mongodb.com/products/compass) est une GUI officielle qui permet des interactions avec mongoDB. 
 
 ## Connexion de mongodb
-Ouvrir le terminal et aller dans la répertoire `bin` de mongodb.
+Ouvrir le terminal et aller dans le répertoire `bin` de mongodb.
 Initialiser mongoDB selon le fichier de configuration avec ligne commande : 
 ```
 ./mongod --config mongodb.conf
@@ -64,7 +103,7 @@ Pour lancer mongo shell, utiliser ligne commande :
 ```
 ./mongo --port 28018
 ```
-Pour lancer la service de mongodb, utiliser ligne commande :
+Pour lancer le service de mongodb, utiliser ligne commande :
 ```
 ./mongod --port 28018 --dbpath /work/weiy/local/mongodb-linux-x86_64-rhel70-4.2.3/bin/data/db
 ```
@@ -77,23 +116,23 @@ client = MongoClient('localhost', 28018, serverSelectionTimeoutMS = 2000)
 
 **Remarque** : Avant l’exécution du script, il faut d'abord lancer les services nécessaires :
  - kafka zookeeper : 
- ```bash
+```bash
 > bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
  - kafka service
- ```bash
+```bash
 > bin/kafka-server-start.sh config/server.properties
 ```
  - mongoDB
- ```bash
+```bash
 > ./mongod --port 28018 --dbpath /work/weiy/local/mongodb-linux-x86_64-rhel70-4.2.3/bin/data/db
 ```
  - jaeger
- ```bash
+```bash
 > ./jeager-all-in-one
 ```
  - mongo-compass (optionnel)
- ```bash
+```bash
 > ./mongo-compass
 ```
 
@@ -103,26 +142,32 @@ Tous les fonctions de tests sont écrits dans le fichier `../TimeSeriesTools/mon
 
 Liste des paramètres d'entrée : 
  - `--query`: le string de la requête
+   - valeur par défaut : '{"timestamp":{"$regex":"10:"}}'
  - `--value`: la requête des modifications des données sélectionnées
+    - valeur par défaut : '{"$set":{"timestamp":"00/00/0000 00:00"}}
  - `--topic`: indiquer le nom du topic désiré
+    - valeur par défaut : "eolienne_jour_1"
  - `--collection`: indiquer le nom de la collection désirée
+    - valeur par défaut : "test_eolienne"
  - `--tracer`: indiquer le nom du tracer à initialiser
- - `--function`: indiquer le nom de la fonction à tester. 
+    - valeur par défaut : "mongodb_test_eolienne_1_jour"
+ - `--function`: indiquer le nom de la fonction à tester, cet paramètre est **obligatoire**. 
  
 Dans le script python il y a 6 fonctions de test à choisir :
 
-`test_insert_bulk` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée à la fois.
-
-`test_insert_one` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée ligne par ligne.
-
-`find_some_data` : Mesurer le temps pour trouver les données correspondantes à la requête dans la base de donnée.
-
-`find_all_data` : Mesurer le temps pour lire toutes les données dans la base de donnée.
-
-`update_some_data` : Mesurer le temps pour modifier les données correspondantes à la requête dans la base de donnée.
-
-`update_all_data`: Mesurer le temps pour modifier toutes les données dans la base de donnée.
- 
+- `test_insert_bulk` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée à la fois.
+  - paramètres optionnels: `--topic`, `--collection`,`--tracer`
+- `test_insert_one` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée ligne par ligne.
+  - paramètres optionnels: `--topic`, `--collection`,`--tracer`
+- `find_some_data` : Mesurer le temps pour trouver les données correspondantes à la requête dans la base de donnée.
+  - paramètres optionnels: `--query`, `--collection`,`--tracer`
+- `find_all_data` : Mesurer le temps pour lire toutes les données dans la base de donnée.
+  - paramètres optionnels: `--collection`,`--tracer`
+- `update_some_data` : Mesurer le temps pour modifier les données correspondantes à la requête dans la base de donnée.
+  - paramètres optionnels: `--query`, `--value`, `--collection`,`--tracer`
+- `update_all_data`: Mesurer le temps pour modifier toutes les données dans la base de donnée.
+  - paramètres optionnels: `--query`, `--value`, `--collection`,`--tracer`
+  
 **Remarque** : Toutes les types des paramètres d'entrée sont string.
 
 ### Code exemple 
