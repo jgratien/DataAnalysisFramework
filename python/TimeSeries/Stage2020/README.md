@@ -80,6 +80,9 @@ Télécharger et désarchiver le package de `mongoDB` pour Centos avec ligne com
 wget http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.2.3.tgz
 tar -xvfz mongodb-linux-x86_64-rhel70-4.2.3.tgz
 ```
+Si mongodb est installé avec l'archive, il faut créer le fichier de configuration manuellement dans le répertoire `bin` et le nommer `mongod.conf`.
+Voici [format de fichier](https://github.com/mongodb/mongo/blob/master/rpm/mongod.conf).
+
 Configurer le fichier mongodb.conf pour éviter le problème de privilège :
 1. `path`: /work/weiy/local/mongodb-linux-x86_64-rhel70-4.2.3/bin/logs/mongodb.log
 2. `dbPath` : /work/weiy/local/mongodb-linux-x86_64-rhel70-4.2.3/bin/data/db
