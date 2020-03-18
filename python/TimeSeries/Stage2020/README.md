@@ -1,7 +1,7 @@
 # **Stage 2020 : Évaluation des base de donnée de type Série Temporelle**
 
 * [Introduction](#introduction)
-* [Structure de la répertoire](#structure-de-la répertoire)
+* [Structure des répertoires](#structure-de-la-répertoire)
 * [Installation des dépendances en commun](#installation-des-dépendances-en-commun)
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
@@ -10,7 +10,7 @@
 # Introduction
 
 
-# Structure de la répertoire
+# Structure des répertoires
 
     .
     ├── MongoDBNotebook         # Notebook fichiers pour tester la performance de mongoDB 
