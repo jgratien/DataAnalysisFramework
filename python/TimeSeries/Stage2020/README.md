@@ -84,7 +84,7 @@ Télécharger l'archive pour linux dans la [page officiel](https://www.jaegertra
 Pour utiliser jaeger en python, faut installer son client python et sa dépendance avec la ligne commande suivante : 
 
 ```bash
-pip install jaeger-client
+pip install 
 pip install opentracing-instrumentation
 ```
 
@@ -103,7 +103,8 @@ pip install opentracing-instrumentation
 | kafka | 2.4.1 |
 | kafka-python | 2.0.1 |
 | jeager | 1.17.0 |
-
+| jaeger-client | 4.3.0|
+| opentracing-instrumentation | 3.2.1 |
 
 # Préparation des données
 Objective de cette partie est récoupérer les données viennent de différentes ressourceses, réparer les fichiers corruptible qui contient des données et les transférer dans les topic via kafka producer.
