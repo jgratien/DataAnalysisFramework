@@ -1,7 +1,7 @@
 # **Stage 2020 : Évaluation des base de donnée de type Série Temporelle**
 
 * [Introduction](#introduction)
-* [Structure des répertoires](#structure-de-la-répertoire)
+* [Structure des répertoires](#structure-des-répertoires)
 * [Installation des dépendances en commun](#installation-des-dépendances-en-commun)
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
