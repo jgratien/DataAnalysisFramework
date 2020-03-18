@@ -1,6 +1,7 @@
 # **Stage 2020 : Évaluation des base de donnée de type Série Temporelle**
 
 * [Introduction](#introduction)
+* [Structure de la répertoire](#structure-de-la répertoire)
 * [Installation des dépendances en commun](#installation-des-dépendances-en-commun)
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
@@ -8,6 +9,13 @@
 
 # Introduction
 
+
+# Structure de la répertoire
+
+    .
+    ├── MongoDBNotebook         # Notebook fichiers pour tester la performance de mongoDB 
+    ├── TimeSeriesTools         # Python fichiers pour les functions communs
+    └── README.md
 
 
 # Installation des dépendances en commun
@@ -27,7 +35,7 @@ Le script va modifier le contenu dans ~/.bashrc, donc il faut activer anaconda a
 ```bash
 > conda list
 ```
-### Installer `Kafka` 
+### Installer `kafka` 
 Télécharger l'archive et le désarchiver avec ligne commande suivante : 
 ```bash
 > wget http://apache.crihan.fr/dist/kafka/2.4.1/kafka_2.12-2.4.1.tgz
@@ -65,7 +73,7 @@ import kafka
 from kafka import KafkaProducer, KafkaConsumer
 ```
 
-### Installer jaeger
+### Installer `jaeger`
  `jeager` est un système de traçage distribué publié en open source par Uber Technologies. C'est une extension facile à installer et il est principalement utilisé pour l'optimisation des performances / latence. Vu que les bases de données nous allons
  
 est une solution globale et faisable pour évaluer tous les types de bases de données. C'est une extension qui peut collaborer avec les codes python et affiche les résultats dans un Web UI. 
@@ -96,13 +104,6 @@ pip install opentracing-instrumentation
 | kafka-python | 2.0.1 |
 | jeager | 1.17.0 |
 
-
-### Structure de la répertoire
-
-    .
-    ├── MongoDBNotebook         # Notebook fichiers pour tester la performance de mongoDB 
-    ├── TimeSeriesTools         # Python fichiers pour les functions communs
-    └── README.md
 
 # Préparation des données
 Objective de cette partie est récoupérer les données viennent de différentes ressourceses, réparer les fichiers corruptible qui contient des données et les transférer dans les topic via kafka producer.
