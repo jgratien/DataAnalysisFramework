@@ -2,6 +2,7 @@
 
 * [Introduction](#introduction)
 * [Installation des dépendances en commun](#installation-des-dépendances-en-commun)
+* [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
 * [Évaluation de InfluxDB](#evaluation-de-influxdb)
 
@@ -10,7 +11,8 @@
 
 
 # Installation des dépendances en commun
-### Pour installer `Anaconda3` : 
+
+### Installer `Anaconda3` 
 Télécharger le script (python 3.7) pour linux dans le [download page officiel](https://www.anaconda.com/distribution/#download-section). 
 Exécuter le bash avec ligne commande : 
 ```bash
@@ -25,7 +27,7 @@ Le script va modifier le contenu dans ~/.bashrc, donc il faut activer anaconda a
 ```bash
 > conda list
 ```
-### Pour installer `Kafka` : 
+### Installer `Kafka` 
 Télécharger l'archive et le désarchiver avec ligne commande suivante : 
 ```bash
 > wget http://apache.crihan.fr/dist/kafka/2.4.1/kafka_2.12-2.4.1.tgz
@@ -39,6 +41,13 @@ Aller dans le répertoire `config` et configurer les fichiers.
 1. dataDir=/home/ymo/local/var/kafka/zookeeper
 2. clientPort=2181 (la porte par défaut est 2181, à modifier si besoin)
 
+Pour utiliser kafka dans script python, il faut installer le package `kafka-python` avec lignes commande suivante : 
+
+```bash
+> pip install kafka-python
+```
+**Remarque** : N'installer pas le package `kafka`, c'est l'ancienne version.
+
 #### Tester le service kafka
  - kafka zookeeper : 
 ```bash
@@ -48,6 +57,30 @@ Aller dans le répertoire `config` et configurer les fichiers.
 ```bash
 > bin/kafka-server-start.sh config/server.properties
 ```
+
+#### Tester kafka-python 
+
+```python
+import kafka
+from kafka import KafkaProducer, KafkaConsumer
+```
+
+### Installer jaeger
+ `jeager` est un système de traçage distribué publié en open source par Uber Technologies. C'est une extension facile à installer et il est principalement utilisé pour l'optimisation des performances / latence. Vu que les bases de données nous allons
+ 
+est une solution globale et faisable pour évaluer tous les types de bases de données. C'est une extension qui peut collaborer avec les codes python et affiche les résultats dans un Web UI. 
+ 
+Télécharger l'archive pour linux dans la [page officiel](https://www.jaegertracing.io/download/) et désarchiver le package.
+
+#### Installer le client python
+Pour utiliser jaeger en python, faut installer son client python et sa dépendance avec la ligne commande suivante : 
+
+```bash
+pip install jaeger-client
+pip install opentracing-instrumentation
+```
+
+
 ## Information du système global :
 | Nom | Version |
 | ---- | ----:|
@@ -59,10 +92,11 @@ Aller dans le répertoire `config` et configurer les fichiers.
  | Nom | Version |
 | ---- | ----:|
 | Anaconda3 | 2020.02 | 
-| Kafka | 2.4.1 |
+| kafka | 2.4.1 |
+| kafka-python | 2.0.1 |
 | jeager | 1.17.0 |
 
-> `jeager` est une solution globale et faisable pour évaluer tous les types de bases de données. C'est une extension qui collabore avec les codes python et affiche les résultats dans un Web UI.
+
 ### Structure de la répertoire
 
     .
@@ -70,6 +104,43 @@ Aller dans le répertoire `config` et configurer les fichiers.
     ├── TimeSeriesTools         # Python fichiers pour les functions communs
     └── README.md
 
+# Préparation des données
+Objective de cette partie est récoupérer les données viennent de différentes ressourceses, réparer les fichiers corruptible qui contient des données et les transférer dans les topic via kafka producer.
+
+## Resources et formats des données
+* smaritGrid
+  - format des fichiers originaux : fichier .csv 
+  - exemple des données originales : 
+    | timestamp | tagname | value | quality | 
+    | ---- | ----| ---- | ---- |
+    | 01/01/2019 09:15:12 | CRY.CENTRALE_SOLAIRE.CRY_act_prod_pow | 1.000000000 | 100.0 |
+  - nombre de colonne : 4
+  
+* fuites d'éolienne
+  - format des fichiers originaux : fichier .xls
+  > Les fichiers .xls d'origine sont corruptibles donc ils pouvent pas être utilisé directement. Utiliser le script `../TimeSeriesTool/recover_xls_files.py` pour générer les fichiers .csv corrects avant lire les données.
+  - exemple des données originales : 
+  
+    | Heure | Temps écoulé | 4069 state | ... | HP_Delta_iCH4_2min | HP_Delta_iCH4_5min | 
+    | ---- | ----| ---- | ---- | ---- | ---- |
+    | 02/10/2019 09:11:02 | 0 | 1,010000	 | ... | 0,00 | 0,00 |
+ 
+  - nombre de colonne : 51
+* elements 
+  - format des fichiers originaux : fichier .bson 
+  
+  > BSON, abréviation de Binary JSON, est une sérialisation codée en binaire de documents de type JSON. Ce type de fichier est utilisé principalement comme stockage de données et format de transfert de données par le réseau dans la base de données MongoDB. C'est un format binaire permettant de représenter des structures de données simples et des tableaux associatifs.
+  Pour importer le fichier .bson dans une seule collection d'une base de MongoDB, utiliser la ligne commande suivante :
+  ```bash
+  > mongorestore --drop -d db_name -c collection_name /path/file.bson
+  ```
+  **Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
+  
+  - exemple des données originales : 
+    | timestamp | tagname | value | quality | 
+    | ---- | ----| ---- | ---- |
+    | 01/01/2019 09:15:12 | CRY.CENTRALE_SOLAIRE.CRY_act_prod_pow | 1.000000000 | 100.0 |
+  - nombre de élément : 
 
 # Evaluation de MongoDB
 > Cette partie montre les démarches pour tester six différentes opérations dans une mongo base. Les sources de données sont smartGrid et éolienne.  
@@ -80,7 +151,7 @@ Télécharger et désarchiver le package de `mongoDB` pour Centos avec ligne com
 wget http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.2.3.tgz
 tar -xvfz mongodb-linux-x86_64-rhel70-4.2.3.tgz
 ```
-Si mongodb est installé avec l'archive, il faut créer le fichier de configuration manuellement dans le répertoire `bin` et le nommer `mongod.conf`.
+Si mongodb est installé avec l'archive, il faut créer le fichier de configuration manuellement dans le répertoire `bin` et le nommer `mongodb.conf`.
 Voici [format de fichier](https://github.com/mongodb/mongo/blob/master/rpm/mongod.conf).
 
 Configurer le fichier mongodb.conf pour éviter le problème de privilège :
@@ -89,6 +160,8 @@ Configurer le fichier mongodb.conf pour éviter le problème de privilège :
 3. `pidFilePath`: /work/weiy/local/var/run/mongodb/mongod.pid
 4. `port`: 28018 
 5. `authorization`: disabled
+
+### Installer le client python
 
 Installer le package `pymongo` (le client python pour mongoDB) avec ligne commande :
 ```
@@ -197,3 +270,19 @@ Choisir le nom de tracer à gauche et cliquer query pour trouver les information
 
 # Evaluation de InfluxDB
 
+## Installation et configuraion
+
+### Installer le client python
+Pour utiliser le client python de l'InfluxDB, il faut installer le package `influxdb` en utilisant la ligne commande suivante : 
+
+```bash
+> pip install influxdb
+
+```
+
+
+## Information des dépendances 
+| Dépendances | Version |
+| ------ | -----------: |
+| InfluxDB |  |
+| influxdb (client python) | 5.2.3 |
