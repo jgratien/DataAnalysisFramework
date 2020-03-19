@@ -136,7 +136,7 @@ Objective de cette partie est récoupérer les données viennent de différentes
   ```bash
   > mongorestore --drop -d db_name -c collection_name /path/file.bson
   ```
-  **Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
+**Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
   
   - exemple des données originales : 
     | timestamp | tagname | value | quality | 
@@ -224,29 +224,42 @@ Liste des paramètres d'entrée :
  - `--value`: la requête des modifications des données sélectionnées
     - valeur par défaut : '{"$set":{"timestamp":"00/00/0000 00:00"}}
  - `--topic`: indiquer le nom du topic désiré
-    - valeur par défaut : "eolienne_jour_1"
+    - valeur par défaut : "eolienne_DT"
  - `--collection`: indiquer le nom de la collection désirée
-    - valeur par défaut : "test_eolienne"
+    - valeur par défaut : "eolienne_DT"
  - `--tracer`: indiquer le nom du tracer à initialiser
     - valeur par défaut : "mongodb_test_eolienne_1_jour"
- - `--function`: indiquer le nom de la fonction à tester, cet paramètre est **obligatoire**. 
- 
+ - `--domain`: indiquer l'address du domaine pour connecter à la base de mongodb
+    - valeur par défaut : "localhost"
+ - `--port`: indiquer la porte pour connecter à la base de mongodb
+    - valeur par défaut : "27017"
+ - `--function`: indiquer le nom de la fonction à tester, il n'a pas de valeur par défaut donc cet paramètre est **obligatoire**. 
+
+**Remarque** : 
+- Sauf que le numéro de la porte est int, toutes les types des paramètres d'entrée sont string.
+- Les paramètres suivantes sont optionnels pour toutes les functions : 
+    - <--tracer>
+    - <--collection>
+    - <--domain>
+    - <--port>
+
 Dans le script python il y a 6 fonctions de test à choisir :
 
 - `test_insert_bulk` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée à la fois.
-  - paramètres optionnels: `--topic`, `--collection`,`--tracer`
+  - paramètres optionnels: <--topic>
 - `test_insert_one` : Mesurer le temps pour insérer toutes les données collectées dans la base de donnée ligne par ligne.
-  - paramètres optionnels: `--topic`, `--collection`,`--tracer`
+  - paramètres optionnels: <--topic>
 - `find_some_data` : Mesurer le temps pour trouver les données correspondantes à la requête dans la base de donnée.
-  - paramètres optionnels: `--query`, `--collection`,`--tracer`
+  - paramètres optionnels: <--query>
 - `find_all_data` : Mesurer le temps pour lire toutes les données dans la base de donnée.
-  - paramètres optionnels: `--collection`,`--tracer`
+
 - `update_some_data` : Mesurer le temps pour modifier les données correspondantes à la requête dans la base de donnée.
-  - paramètres optionnels: `--query`, `--value`, `--collection`,`--tracer`
+  - paramètres optionnels: <--query>,<--value>
 - `update_all_data`: Mesurer le temps pour modifier toutes les données dans la base de donnée.
-  - paramètres optionnels: `--query`, `--value`, `--collection`,`--tracer`
+  - paramètres optionnels: <--query>,<--value>
   
-**Remarque** : Toutes les types des paramètres d'entrée sont string.
+
+
 
 ### Code exemple 
 
