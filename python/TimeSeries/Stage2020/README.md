@@ -258,12 +258,36 @@ Dans le script python il y a 6 fonctions de test à choisir :
 - `update_all_data`: Mesurer le temps pour modifier toutes les données dans la base de donnée.
   - paramètres optionnels: <--query>,<--value>
   
-
-
-
 ### Code exemple 
+Pour récupérer toutes les données venant d'un topic de kafka, et mesurer le temps d'insertion ligne par ligne dans la base de mongodb, il faut préciser au minimun un paramètre : le nom de la function à tester. Les autres cinq paramètres sont optionnels dans cette function pour indiquer le source des données (c'est à dire lire les données dans quel topic), la destination des données (insérer les données dans quelle collection dans la base de données), le nom de tracer pour visualiser les informations détailles de cette opération, le domain et la porte pour connecter à la base de mongodb (ça dépend le fichier de configuration).
+Dans le terminal : 
 
- 
+```bash
+> python mongodb_test.py --function test_insert_one --topic "eolienne_DT" --collection "eolienne_DT" --domain "localhost" --port 27017 --tracer "test_insert_lines"
+```
+Dans le notebook :
+
+```python
+%run ../TimeSeriesTools/mongodb_test.py --function test_insert_one --topic "eolienne_DT" --collection "eolienne_DT" --domain "localhost" --port 27017 --tracer "test_insert_lines"
+```
+
+Pendant l'exécution du script, une ligne de données incorrecte est insérée pour tester la validation de données.
+Une message s'affiche dans la console qui indique l'index de ligne et les champs des données invalides: 
+
+```bash
+line:  51288 , position:  0 , require  Heure
+line:  51288 , position:  1 , require  Temps écoulé
+line:  51288 , position:  12 , require  MWD Wind Speed
+```
+Après l'exécution du script, un tracer qui contient deux sous-span (un pour l'étape de la collection des données venant du topic, l'autre pour l'étape de l'insertion des donnnées) est signalé. Les informations et les barres intéractives sont ensuite disponibles sur wen UI de jeager (http://localhost:16686 par défaut).
+
+```bash
+Reporting span bb054b92a0316e58:16b5632098eb1b2:44a4e06b3541cefc:1 test_insert_lines.collect_data
+Reporting span bb054b92a0316e58:d0fa76c1b3f2abed:44a4e06b3541cefc:1 test_insert_lines.insert_one
+51289  documents inserted
+Reporting span bb054b92a0316e58:44a4e06b3541cefc:0:1 test_insert_lines.test_line_insertion
+```
+
 ### Surveillance des tâches
 Un span unique de tracer principal est initialisé avant le démarre de chaque fonction, ce span contient le temps d’exécution de la fonction, les tags et les logs.
 Naviguer dans l'URL `http://localhost:16686/` (porte 16686 par defaut) pour acceder le Web UI de jaeger.
