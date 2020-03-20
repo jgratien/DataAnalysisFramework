@@ -95,6 +95,7 @@ pip install opentracing-instrumentation
 | CentOS Linux | 7.7.1908|
 | jre | 1.8.0_222-ea|
 | python | 3.7.6 |
+| openssl | 1.0.1e | 
 
 ### Information des dépendances en commun :
  | Nom | Version |
@@ -357,6 +358,46 @@ Choisir le nom de tracer à gauche et cliquer query pour trouver les information
 # Evaluation de InfluxDB
 
 ## Installation et configuraion
+#### En cas d'utiliser systèm Ubuntu, ajoutez le référentiel InfluxData avec les commandes suivantes:
+```bash
+> wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+source /etc/lsb-release
+echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+```
+Installer InfluxDB directement avec sudo apt-get : 
+```bash
+sudo apt-get update && sudo apt-get install influxdb
+```
+#### En cas d'installer InfluxDB en utilisant l'archive :
+Télécharger le package dans la [page officielle](https://portal.influxdata.com/downloads/) et le désarchiver : 
+
+```bash
+wget https://dl.influxdata.com/influxdb/releases/influxdb-1.7.10-static_linux_amd64.tar.gz
+tar xvfz influxdb-1.7.10-static_linux_amd64.tar.gz
+```
+### Configurer le fichier de config
+La location du fichier de config est `/etc/influxdb/influxdb.conf`.
+
+Configurer les paramètres suivants: 
+
+`meta`
+- dir = "/home/ymo/local/var/influxdb/meta"
+  
+`data`
+- dir = "/home/ymo/local/var/influxdb/data"
+- wal-dir = "/home/ymo/local/var/influxdb/wal"
+
+`http` : 
+- enabled = true
+- flux-enabled = true
+- bind-address = ":8086"
+
+### Tester l'installation de InfluxDB
+
+Lancer InfluxDB selon le fichier de configuration avec command suivant:
+```
+> sudo influxd -config /etc/influxdb/influxdb.conf
+```
 
 ### Installer le client python
 Pour utiliser le client python de l'InfluxDB, il faut installer le package `influxdb` en utilisant la ligne commande suivante : 
@@ -370,5 +411,5 @@ Pour utiliser le client python de l'InfluxDB, il faut installer le package `infl
 ## Information des dépendances 
 | Dépendances | Version |
 | ------ | -----------: |
-| InfluxDB |  |
+| InfluxDB | 1.7.0 |
 | influxdb (client python) | 5.2.3 |
