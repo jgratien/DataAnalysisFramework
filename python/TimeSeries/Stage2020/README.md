@@ -131,25 +131,52 @@ Objective de cette partie est récoupérer les données viennent de différentes
 * elements 
   - format des fichiers originaux : fichier .bson 
   
-  > BSON, abréviation de Binary JSON, est une sérialisation codée en binaire de documents de type JSON. Ce type de fichier est utilisé principalement comme stockage de données et format de transfert de données par le réseau dans la base de données MongoDB. C'est un format binaire permettant de représenter des structures de données simples et des tableaux associatifs.
+  > BSON, abréviation de Binary JSON, est une sérialisation codée en binaire de documents de type JSON. Ce type de fichier est utilisé    principalement comme stockage de données et format de transfert de données par le réseau dans la base de données MongoDB. C'est un format binaire permettant de représenter des structures de données simples et des tableaux associatifs.
 Pour importer le fichier .bson dans une seule collection d'une base de MongoDB, utiliser la ligne commande suivante :
 ```bash
 > mongorestore --drop -d test -c elements /home/ymo/local/work-ref/data/elements/elements.bson
 ```
-Le résultat s'affiche dans la console :
+  Le résultat s'affiche dans la console :
 ```bash
 977448 objects found
 2020-03-20T11:07:50.564+0100    Creating index: { key: { _id: { $numberInt: "1" } }, name: "_id_", ns: "test.elements" }
 Error creating index test.elements: 73 err: "cannot write to 'test.system.indexes'"
 Aborted (core dumped)
 ```
-**Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
+  **Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
   
   - exemple des données originales : 
-    | timestamp | tagname | value | quality | 
-    | ---- | ----| ---- | ---- |
-    | 01/01/2019 09:15:12 | CRY.CENTRALE_SOLAIRE.CRY_act_prod_pow | 1.000000000 | 100.0 |
-  - nombre de élément : 
+```bash
+  {
+        "_id" : ObjectId("5d89cfd59c285126bb089f75"),
+        "data" : {
+                "Elements" : {
+                        "NO" : 0,
+                        "NO2" : 0,
+                        "NH3" : 0,
+                        "Soot" : 20.799999237060547,
+                        "H2O" : null,
+                        "O2" : null,
+                        "counter" : 198
+                },
+                "Naneos" : {
+                        "NaneosTime" : 0,
+                        "ParticuleNumber" : 0,
+                        "ChargerDiffusionCurrent" : 0,
+                        "ChargerHighVoltage" : 0,
+                        "ElectroMeterReading" : 0,
+                        "ElectroMeterAmplitude" : 0,
+                        "Temperature" : 0,
+                        "RelativeHumidity" : 0,
+                        "BarometricPressureInHousing" : 0,
+                        "Status" : 0
+                }
+        }
+        "updatedAt" : ISODate("2019-09-24T08:12:05.357Z"),
+        "createdAt" : ISODate("2019-09-24T08:12:05.358Z")
+   }
+```
+  - nombre de élément : 19
 
 # Evaluation de MongoDB
 > Cette partie montre les démarches pour tester six différentes opérations dans une mongo base. Les sources de données sont smartGrid et éolienne.  
