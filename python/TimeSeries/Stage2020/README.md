@@ -130,7 +130,6 @@ Objective de cette partie est récoupérer les données viennent de différentes
   - nombre de colonne : 51
 * elements 
   - format des fichiers originaux : fichier .bson 
-  
   > BSON, abréviation de Binary JSON, est une sérialisation codée en binaire de documents de type JSON. Ce type de fichier est utilisé    principalement comme stockage de données et format de transfert de données par le réseau dans la base de données MongoDB. C'est un format binaire permettant de représenter des structures de données simples et des tableaux associatifs.
 Pour importer le fichier .bson dans une seule collection d'une base de MongoDB, utiliser la ligne commande suivante :
 ```bash
@@ -144,7 +143,6 @@ Error creating index test.elements: 73 err: "cannot write to 'test.system.indexe
 Aborted (core dumped)
 ```
   **Remarque** : Faut taper ce command directement dans un terminal, même si c'est un command seulement pour l'opération de MongoDB, ça fonctionne pas dans mongoshell.
-  
   - exemple des données originales : 
 ```bash
   {
