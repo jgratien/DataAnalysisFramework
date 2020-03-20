@@ -30,8 +30,7 @@ def mongodb_connect(domain, port):
     domain_str = str(domain) + ":" + str(port)
     try:
         print ("Trying to connect to MongoDB server:", domain, "on port:", port)
-        client = MongoClient(host = [domain_str],
-                             serverSelectionTimeoutMS = 2000)
+        client = MongoClient(host = [domain_str])
         #print ("server_info():", client.server_info())
     except errors.ServerSelectionTimeoutError as err:
         print ("pymongo ERROR:", err)

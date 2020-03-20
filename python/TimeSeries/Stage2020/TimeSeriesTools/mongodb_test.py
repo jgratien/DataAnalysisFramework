@@ -68,6 +68,7 @@ def insert_bulk(list_data,collection):
         span.set_tag('mongodb','operation:insert_many')
         with span_in_context(span):
             res = collection.insert_many(list_data)
+            span.log_kv({'event': 'insert data in one statement' , 'value': res })
             return len(res.inserted_ids)
             
 def test_insert_bulk(collection,topic):
@@ -76,6 +77,7 @@ def test_insert_bulk(collection,topic):
         with span_in_context(span):
             data=consumer_single_collection(topic)
             result = insert_bulk(data,collection)
+            print(result, " documents inserted")
             return result
         
 def insert_one(list_data,collection):
@@ -84,6 +86,8 @@ def insert_one(list_data,collection):
         with span_in_context(span):
             for data in list_data:
                 collection.insert_one(data)
+            span.log_kv({'event': 'insert data line by line' , 'value': len(list_data) })
+            return len(list_data)
 
             
 def test_insert_one(collection,topic):
@@ -91,23 +95,20 @@ def test_insert_one(collection,topic):
         span.set_tag('mongodb','insertion_test')
         with span_in_context(span):
             data=consumer_single_collection(topic)
-            insert_one(data,collection)
+            result = insert_one(data,collection)
+            print(result, " documents inserted")
+            return result
         
 def find_all_data(collection):
     data_list=[]
     with tracer.start_span('test_find_doc') as span:
         span.set_tag('mongodb','find_all_doc')
         with span_in_context(span):
-            try:
-                for d in collection.find():
-                    data_list.append(d)
-                span.log_kv({'event': 'find all data' , 'value': len(data_list) })
-                print(len(data_list), " documents found")
-                span.set_tag('error', 'false')
-                return data_list
-            except:
-                span.set_tag('error', 'true')
-                return            
+            for d in collection.find():
+                data_list.append(d)
+            span.log_kv({'event': 'find all data' , 'value': len(data_list) })
+            print(len(data_list), " documents found")
+            return data_list       
         
 def find_some_data(collection,query):
     with tracer.start_span('test_find_doc') as span:
@@ -159,9 +160,11 @@ def main():
     parser.add_argument("--function",choices=["test_insert_bulk", "test_insert_one","find_some_data","find_all_data","update_some_data","update_all_data"],required=True, type=str, help="Function name")
     parser.add_argument("--query",default='{"timestamp":{"$regex":"10:"}}', type=str, help="Input query")
     parser.add_argument("--value",default='{"$set":{"timestamp":"00/00/0000 00:00"}}', type=str, help="New value")
-    parser.add_argument("--topic",default="eolienne_jour_1", type=str, help="Topic name")
-    parser.add_argument("--collection",default="test_eolienne", type=str, help="collection name")
+    parser.add_argument("--topic",default="eolienne_DT", type=str, help="Topic name")
+    parser.add_argument("--collection",default="eolienne_DT", type=str, help="collection name")
     parser.add_argument("--tracer",default="mongodb_test_eolienne_1_jour", type=str, help="tracer name")
+    parser.add_argument("--domain",default="localhost", type=str, help="mongodb domain")
+    parser.add_argument("--port",default=27017, type=int, help="mongodb port")
     
     args = parser.parse_args()
     fuc=args.function
@@ -170,11 +173,13 @@ def main():
     topic=args.topic
     collection=args.collection
     tracer_name=args.tracer
+    domain=args.domain
+    port=args.port
     query_dict=json.loads(query_string)
     new_value=json.loads(value)    
     
     tracer = utils.init_tracer(tracer_name) 
-    client = utils.mongodb_connect("localhost", 28018)
+    client = utils.mongodb_connect(domain, port)
     col=client.test[collection]
 
     if fuc == "test_insert_one":
