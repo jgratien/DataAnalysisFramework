@@ -87,7 +87,7 @@ Pour utiliser jaeger en python, faut installer son client python et sa dépendan
 pip install 
 pip install opentracing-instrumentation
 ```
-
+### Installer `visdom`
 
 ## Information du système global :
 | Nom | Version |
@@ -106,7 +106,7 @@ pip install opentracing-instrumentation
 | jeager | 1.17.0 |
 | jaeger-client | 4.3.0|
 | opentracing-instrumentation | 3.2.1 |
-
+| visdom | 0.1.8.9 |
 # Préparation des données
 Objective de cette partie est récoupérer les données viennent de différentes ressourceses, réparer les fichiers corruptible qui contient des données et les transférer dans les topic via kafka producer.
 
@@ -413,3 +413,18 @@ Pour utiliser le client python de l'InfluxDB, il faut installer le package `infl
 | ------ | -----------: |
 | InfluxDB | 1.7.0 |
 | influxdb (client python) | 5.2.3 |
+
+
+# Evaluation de Warp10
+
+## Installation et configuraion
+
+```bash
+wget https://dl.bintray.com/senx/generic/io/warp10/warp10/2.4.0/warp10-2.4.0.tar.gz
+tar xfvz warp10-2.4.0.tar.gz
+Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
+```
+
+```bash
+Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
+```
