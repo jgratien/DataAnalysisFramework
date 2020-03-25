@@ -6,6 +6,8 @@
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
 * [Évaluation de InfluxDB](#evaluation-de-influxdb)
+* [Validation des données](#validation-des-données)
+* [Visualisation des données](#visualisation-des-données)
 
 # Introduction
 
@@ -87,7 +89,7 @@ Pour utiliser jaeger en python, faut installer son client python et sa dépendan
 pip install 
 pip install opentracing-instrumentation
 ```
-### Installer `visdom`
+
 
 ## Information du système global :
 | Nom | Version |
@@ -106,7 +108,7 @@ pip install opentracing-instrumentation
 | jeager | 1.17.0 |
 | jaeger-client | 4.3.0|
 | opentracing-instrumentation | 3.2.1 |
-| visdom | 0.1.8.9 |
+
 # Préparation des données
 Objective de cette partie est récoupérer les données viennent de différentes ressourceses, réparer les fichiers corruptible qui contient des données et les transférer dans les topic via kafka producer.
 
@@ -404,7 +406,6 @@ Pour utiliser le client python de l'InfluxDB, il faut installer le package `infl
 
 ```bash
 > pip install influxdb
-
 ```
 
 
@@ -428,3 +429,23 @@ Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
 ```bash
 Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
 ```
+# Validation des données 
+
+cerberus 1.3.2
+
+# Visualisation des données
+
+## Installation 
+
+### Installer `visdom`
+```bash
+> pip install chart-studio
+```
+
+### Information des dépendances en commun :
+| Nom | Version |
+| ---- | ----:|
+| visdom | 0.1.8.9 |
+| chart-studio | 1.0.0 |
+| plotly | 4.5.4 |
+| retrying | 1.3.3 |
