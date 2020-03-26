@@ -431,14 +431,43 @@ Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
 ```
 # Validation des données 
 
-cerberus 1.3.2
+Cerberus fournit une fonctionnalité de validation des données puissante mais simple et légère prête à l'emploi et est conçue pour être facilement extensible, il permet une validation personnalisée en définissant le schéma de la structure des données.
+
+## Installation 
+
+```bash
+> pip install cerberus
+```
+## Définition du schéma
+Par exemple, voici la validation des données venant des fuites d'éolienne.
+Pour l'instant, on suppose que tous les champs existent, les champs sont remplis et le type de données est string.
+
+Schéma de validation : 
+```python
+    schema =  {
+    "_id":{'required': True},
+    "Heure":{'type': 'string','required': True,'empty': False},
+    "Temps écoulé":{'type': 'string','required': True,'empty': False},
+    ...
+    ...
+    ...
+    "HP_Delta_iCH4_2min":{'type': 'string','required': True,'empty': False},
+    "HP_Delta_iCH4_5min":{'type': 'string','required': True,'empty': False}
+    }
+```
+> Cerberus ne connaît pas le type de bson.objectid.ObjectId donc dans le schéma il n'y a pas de type de données pour "_id".
+
+### Information des dépendances en commun :
+| Nom | Version |
+| ---- | ----:|
+| cerberus | 1.3.2 |
 
 # Visualisation des données
 
 ## Installation 
 
-### Installer `visdom`
 ```bash
+> pip install visdom
 > pip install chart-studio
 ```
 
