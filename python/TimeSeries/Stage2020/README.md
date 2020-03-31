@@ -423,11 +423,68 @@ Pour utiliser le client python de l'InfluxDB, il faut installer le package `infl
 ```bash
 wget https://dl.bintray.com/senx/generic/io/warp10/warp10/2.4.0/warp10-2.4.0.tar.gz
 tar xfvz warp10-2.4.0.tar.gz
-Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
 ```
-
+Dans le répertoire `bin`, ajouter le chemain de JVM dans le fichier `warp10-standalone.sh`.<br>
+Ensuite démarrer bootstrap en tant que root:
+```bash
+sudo ./warp10-standalone.init bootstrap
+```
+Les résultats seront affichés dans la console : 
 ```bash
 Warp 10 config has been generated here: /home/ymo/local/warp10-2.4.0/etc/conf.d
+```
+Les tokens sont générés dans le fichier `$WARP10_HOME/etc/initial.tokens`.<br>
+La porte par défaut est 8080, le numéro de porte peut être modifié si nécessaire :<br>
+Modifier le fichier `$WARP10_HOME/etc/conf.d/00-warp.conf`<br>
+Changer la valeur de `standalone.port = 9090`
+
+**Remarque** : le privilège des fichiers de configuration sont 644 (-rw-r--r--), dont il faut ajouter le privilège d'écrire avant le modifier si l'utilisateur courant n'est pas l'utilisateur spécialement pour warp10.
+
+## Tester l'installation
+Lancer le service en tant que root : 
+```bash
+> sudo ./warp10-standalone.init start
+```
+Les informations suivantes seront affichées dans la console : 
+```bash
+>   ___       __                           ____________
+  __ |     / /_____ _______________      __<  /_  __ \
+  __ | /| / /_  __ `/_  ___/__  __ \     __  /_  / / /
+  __ |/ |/ / / /_/ /_  /   __  /_/ /     _  / / /_/ /
+  ____/|__/  \__,_/ /_/    _  .___/      /_/  \____/
+                           /_/
+##
+## Warp 10 listens on 127.0.0.1:9090
+##
+2020-03-31 15:01:14.208:INFO:iwsjoejs.Server:jetty-8.y.z-SNAPSHOT
+2020-03-31 15:01:14.260:INFO:iwsjoejs.AbstractConnector:Started SelectChannelConnector@127.0.0.1:51173
+```
+Pour tester l'installation de warp10, on peut push une ligne de données de test vers requête HTTP : 
+```bash
+> curl -v -H 'X-Warp10-Token: cz7.51xyPcRvOUr3KH6UPFDUNdPIshpREsi0rBEWITDEG6BsGKpHZT4qFsOwvXmzyQxJXZ_VBPv5bwSEIRsV4Plu9ocCNgzG61KP23aSYceKUZLunmw69tqQy9sLzSfb' --data-binary "1// test{} 42" 'http://127.0.0.1:9090/api/v0/update' 
+```
+Ici la valeur de token est écrite dans le fichier `$WARP10_HOME/etc/initial.tokens`, si tout va bien, vous devriez recevoir un HTTP 200 comme ci-dessous : 
+```bash
+* Trying 127.0.0.1:9090...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 9090 (#0)
+> POST /api/v0/update HTTP/1.1
+> Host: 127.0.0.1:9090
+> User-Agent: curl/7.68.0
+> Accept: */*
+> X-Warp10-Token: cz7.51xyPcRvOUr3KH6UPFDUNdPIshpREsi0rBEWITDEG6BsGKpHZT4qFsOwvXmzyQxJXZ_VBPv5bwSEIRsV4Plu9ocCNgzG61KP23aSYceKUZLunmw69tqQy9sLzSfb
+> Content-Length: 13
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 13 out of 13 bytes
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Date: Tue, 31 Mar 2020 13:07:49 GMT
+< Access-Control-Allow-Origin: *
+< Vary: Accept-Encoding, User-Agent
+< Content-Length: 0
+<
+* Connection #0 to host 127.0.0.1 left intact
 ```
 # Validation des données 
 
