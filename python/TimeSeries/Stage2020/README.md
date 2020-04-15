@@ -205,7 +205,7 @@ Affichage de la liste des topic :
 ```bash
 > bin/kafka-topics.sh --list --zookeeper localhost:2181
 ```
-Si le topic désiré n'est pas encore cré, il y a deux solutions : 
+Si le topic désiré n'est pas encore créé, il y a deux solutions : 
 
 * Configurer kafka pour authorizer la auto-creation de topic <br>
     Aller dans le répertoire `config` du kafka, ajouter la ligne ci-dessous dans le fichier `server.properties`
