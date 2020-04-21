@@ -534,10 +534,20 @@ Ici la valeur de token est écrite dans le fichier `$WARP10_HOME/etc/initial.tok
 <
 * Connection #0 to host 127.0.0.1 left intact
 ```
+
+## Installation des dépendences
+Pour manipuler la base de warp10 en python, il est nécessaire d'installer et configurer des extensions.
+
 # Évaluation de M3DB
 
-## Installation 
-
+## Installation
+Comme l'installation de M3 est basée sur la langue GO, il faut d'abord installer la langue go sur l'ordinateur.
+### Installation de go
+Télécharger l'archive de package go selon l'OS dans la [page officel](https://golang.org/dl/).
+Désarchiver le package avec le command suivant (modifier le chemin et le nom de l'archive si nécessaire): 
+```bash
+tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+```
 # Validation des données 
 
 Cerberus fournit une fonctionnalité de validation des données puissante mais simple et légère prête à l'emploi et est conçue pour être facilement extensible, il permet une validation personnalisée en définissant le schéma de la structure des données.
