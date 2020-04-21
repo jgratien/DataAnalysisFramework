@@ -6,6 +6,7 @@
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
 * [Évaluation de InfluxDB](#evaluation-de-influxdb)
+* [Évaluation de M3DB](#evaluation-de-m3db)
 * [Validation des données](#validation-des-données)
 * [Visualisation des données](#visualisation-des-données)
 
@@ -179,6 +180,53 @@ Pour importer le fichier .bson dans une seule collection d'une base de MongoDB, 
    }
   ```
   - nombre de élément : 19
+  
+## Correction des données corrompues
+La source des données d'éolienne est des fichiers .xls qui sont corrompues, ces fichiers ne peuvent pas être lus par des méthodes normales. Le script `../TimeSeriesTools/recover_xls_files.py` est donc utilisé pour restaurer ces fichiers est les enregistrer au format .csv pour faciliter la lecture des données.
+
+Avant l'exécution du script, il faut corriger le chemin des fichiers .xls et le chemain de la destination si nécessaire. Ce script va générer des fichier .xls comme le résultat intermédiaire et les fichier .csv comme le résultat final.
+
+Les informations dans les premières dix lignes seront perdues car ils sont temporairement inutiles.
+  
+## Envoyer les données au Kafka
+Après la préparation des données, tous les données à tester seront envoyées aux topic de kafka pour simuler le cas réel (la transition des données d'un capture au serveur en temps réel). Dans cette partie là, tous les sources de données différentes sont combinées (les fichiers xls, csv, bson...) et le script utiliserai kafkaConsumer pour lire les données venant du topic.
+
+### Lancer le service kafka
+
+Exécuter le zookeeper et le service kafka en arrière-plan : 
+```bash
+> nohup bin/zookeeper-server-start.sh config/zookeeper.properties &
+> nohup bin/kafka-server-start.sh config/server.properties
+```
+### Gestion des topic
+
+Avant l'utulisation du producer, il faut d'abord vérifier si le topic désiré est déjà existé.
+
+Affichage de la liste des topic : 
+```bash
+> bin/kafka-topics.sh --list --zookeeper localhost:2181
+```
+Si le topic désiré n'est pas encore créé, il y a deux solutions : 
+
+* Configurer kafka pour authorizer la auto-creation de topic <br>
+    Aller dans le répertoire `config` du kafka, ajouter la ligne ci-dessous dans le fichier `server.properties`
+    ```
+    auto.create.topics.enable = true
+    ```
+* Créer le topic manuellement dans script python <br>
+    ```python
+    from kafka.admin import KafkaAdminClient, NewTopic
+    admin_client = KafkaAdminClient(bootstrap_servers="localhost:9092", client_id='test')
+
+    topic_list = []
+    topic_list.append(NewTopic(name="example_topic", num_partitions=1, replication_factor=1))
+    admin_client.create_topics(new_topics=topic_list, validate_only=False)
+    ```
+**Remarque** : pour capable de supprimer les topic, il faut ajouter le contenu ci-dessous dans le fichier `server.properties` :
+```
+delete.topic.enable = true
+```
+
 
 # Evaluation de MongoDB
 > Cette partie montre les démarches pour tester six différentes opérations dans une mongo base. Les sources de données sont smartGrid et éolienne.  
@@ -486,6 +534,10 @@ Ici la valeur de token est écrite dans le fichier `$WARP10_HOME/etc/initial.tok
 <
 * Connection #0 to host 127.0.0.1 left intact
 ```
+# Évaluation de M3DB
+
+## Installation 
+
 # Validation des données 
 
 Cerberus fournit une fonctionnalité de validation des données puissante mais simple et légère prête à l'emploi et est conçue pour être facilement extensible, il permet une validation personnalisée en définissant le schéma de la structure des données.
@@ -527,6 +579,9 @@ Schéma de validation :
 > pip install visdom
 > pip install chart-studio
 ```
+## Analyse des données
+### Dépendance
+
 
 ### Information des dépendances en commun :
 | Nom | Version |
