@@ -542,11 +542,59 @@ Pour manipuler la base de warp10 en python, il est nécessaire d'installer et co
 
 ## Installation
 Comme l'installation de M3 est basée sur la langue GO, il faut d'abord installer la langue go sur l'ordinateur.
+
 ### Installation de go
 Télécharger l'archive de package go selon l'OS dans la [page officel](https://golang.org/dl/).
-Désarchiver le package avec le command suivant (modifier le chemin et le nom de l'archive si nécessaire): 
+Désarchiver le package avec le command suivant (modifier le chemin désiré et le nom de l'archive si nécessaire): 
 ```bash
-tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+> tar -C /home/ymo/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+```
+Ajoutez le répertoire `bin` de GO à la variable d'environnement PATH : 
+```bash
+> export PATH=$PATH:export PATH=$PATH:/home/ymo/local/go/bin
+```
+#### Tester l'installation de GO
+On peut utiliser les fichiers de test officiels dans le répertoire `test`.
+```bash
+> cd test
+> go build helloworld.go
+> ./helloworld
+```
+Si tout est bien installé, une ligne s'afficherai dans la console : 
+```bash
+hello, world
+```
+### Installation du M3DB
+D'abord fork le projet de m3db sur github : https://github.com/m3db/m3
+Copier les commandes suivants dans la teminal : 
+```bash
+export working_dir=$GOPATH/src/github.com/m3db
+mkdir -p $working_dir
+
+# Set this to your Github user
+export user="your github profile name"
+
+# Clone your fork
+cd $working_dir
+git clone git@github.com:$user/m3.git
+# or: https://github.com/$user/m3.git
+
+# Set upstream
+cd m3
+git remote add upstream git@github.com:m3db/m3.git
+# or: https://github.com/m3db/m3.git
+
+# Never push to upstream master
+git remote set-url --push upstream no_push
+
+# Check if it makes sense:
+git remote -v
+```
+Ensuite installer les dépendences : 
+
+```bash
+cd $working_dir/m3
+make install-vendor-m3
 ```
 # Validation des données 
 
