@@ -111,6 +111,8 @@ conda install -c conda-forge -n timeseries_base cerberus chart-studio nbformat
 conda install -c conda-forge -n timeseries_base visdom
 ```
 
+
+
 Création à partir d'un fichier yml:
 
 ```bash
@@ -132,6 +134,16 @@ dependencies:
   - chart-studio 
   - nbformat
 ```
+Pour jaeger-client et opentracing il faut les installer avec pip dans l'environnement pour avoir les bonnes versions:
+```bash
+$conda activate timeseries_base
+(timeseries_base)$ pip install jaeger-client==4.3.0
+(timeseries_base)$ pip install opentracing_instrumentation==3.2.1 
+(timeseries_base)$ conda deactivate
+```
+
+
+
 Création des environnements de test à partir de l'environnement de base:
 
 ### Environnement timeseries_mongodb
@@ -139,14 +151,14 @@ Création des environnements de test à partir de l'environnement de base:
 ```bash
 conda create --name timeseries_mongodb --clone timeseries_base
 conda install -c conda-forge -n timeseries_mongodb kafka-python
-conda install -c pdrops -n timeseries_mongodb pymongo influxdb
+conda install -c pdrops -n timeseries_mongodb pymongo
 ```
 
 ### Environnement timeseries_influxdb
 ```bash
 conda create --name timeseries_influxdb --clone timeseries_base
 conda install -c conda-forge -n timeseries_influxdb kafka-python
-conda install -c pdrops -n timeseries_mongodb influxdb
+conda install -c pdrops -n timeseries_influxdb influxdb
 ```
 
 ## Utilisation Jupyter avec environment timeseries
