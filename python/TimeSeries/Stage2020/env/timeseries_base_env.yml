@@ -1,0 +1,10 @@
+name: timeseries_base
+channels:
+- conda-forge/label/cf202003
+dependencies:
+- python=3.7 
+- numpy
+- pandas
+- cerberus 
+- chart-studio 
+- nbformat

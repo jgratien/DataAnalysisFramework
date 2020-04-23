@@ -1,0 +1,2 @@
+jaeger-client==4.3.0
+opentracing-instrumentation==3.2.1
