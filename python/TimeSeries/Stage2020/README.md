@@ -91,6 +91,84 @@ pip install
 pip install opentracing-instrumentation
 ```
 
+## Creation Environnements TimeSeries
+
+Nous allons créer des environnements par type de tests :
+- timeseries_base : environnement avec les outils de base communs aux tests;
+- timeseries_mongodb : environnement pour les tests mongodb;
+- timeseries_influxdb : environnement pour les tests influxdb;
+- timeseries_warp10 : environnement pour les tests warp10;
+- timeseries_m3db : environnement pour les tests m3.
+
+### Environnement timeseries_base
+
+Création en ligne de commande :
+```bash
+conda create --name timeseries_base
+conda install -n timeseries_base numpy pandas
+conda install -c conda-forge -n timeseries_base jaeger-client opentracing_instrumentation 
+conda install -c conda-forge -n timeseries_base cerberus chart-studio nbformat
+conda install -c conda-forge -n timeseries_base visdom
+```
+
+Création à partir d'un fichier yml:
+
+```bash
+conda env create -f timeseries_base_env.yml
+```
+
+Format du fichier timeseries_base_env.yml :
+```timeseries_base_env.yml
+name: timeseries_base
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7 
+  - numpy
+  - pandas
+  - jaeger-client
+  - opentracing_instrumentation
+  - cerberus 
+  - chart-studio 
+  - nbformat
+```
+Création des environnements de test à partir de l'environnement de base:
+
+### Environnement timeseries_mongodb
+
+```bash
+conda create --name timeseries_mongodb --clone timeseries_base
+conda install -c conda-forge -n timeseries_mongodb kafka-python
+conda install -c pdrops -n timeseries_mongodb pymongo influxdb
+```
+
+### Environnement timeseries_influxdb
+```bash
+conda create --name timeseries_influxdb --clone timeseries_base
+conda install -c conda-forge -n timeseries_influxdb kafka-python
+conda install -c pdrops -n timeseries_mongodb influxdb
+```
+
+## Utilisation Jupyter avec environment timeseries
+
+Pour utiliser l'environment timeseries dans Jupyter-lab il faut créer des kernels :
+ - kernel_ts_mongodb ;
+ - kernel_ts_influxdb ;
+ 
+```bash
+$ conda activate timeseries_mongodb
+(timeseries_mongodb)$ conda install ipykernel
+(timeseries_mongodb)$ ipython kernel install --user --name=kernel_ts_mongodb
+(timeseries_mongodb)$ conda deactivate
+
+$ conda activate timeseries_influxdb
+(timeseries_influxdb)$ conda install ipykernel
+(timeseries_influxdb)$ ipython kernel install --user --name=kernel_ts_mongodb
+(timeseries_influxdb)$ conda deactivate
+
+```
+
+Les notebooks devront être lancés avec le kernel kernel_timeseries
 
 ## Information du système global :
 | Nom | Version |
@@ -455,7 +533,10 @@ Pour utiliser le client python de l'InfluxDB, il faut installer le package `infl
 ```bash
 > pip install influxdb
 ```
-
+avec anaconda : 
+```bash
+> conda install -c pdrops influxdb
+```
 
 ## Information des dépendances 
 | Dépendances | Version |
@@ -579,6 +660,13 @@ Schéma de validation :
 > pip install visdom
 > pip install chart-studio
 ```
+
+## Lancement su serveur visdom
+
+```bash
+> python -m visdom.server
+```
+
 ## Analyse des données
 ### Dépendance
 

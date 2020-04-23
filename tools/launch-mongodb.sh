@@ -1,1 +1,2 @@
-mongod -dbpath=/work/irlin355_1/gratienj/BigData/DigitalSandBox/Data/MongoDB
+cd $MONGODB_ROOT
+./bin/mongod --config mongodb.conf
