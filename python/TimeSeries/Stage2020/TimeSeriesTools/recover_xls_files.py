@@ -10,6 +10,7 @@ def fixFiles(path,path_destination):
     lh = []
     xldoc = Workbook()
     sheet = xldoc.add_sheet("Sheet1", cell_overwrite_ok=True)
+    print("start fixing xls files...")
     for index,filename in enumerate(all_files,start=0):
         print(index,filename)
         file = io.open(filename, "r", encoding="latin-1")
@@ -44,6 +45,12 @@ def convertFiles(data,head,path_destination):
         path = path_destination + r'/myTestCsv_'+str(i)+'.csv'
         file.to_csv(path,index=False)
         
+def delete_xls(path):
+    test = os.listdir(path)
+    for item in test:
+        if item.endswith(".xls"):
+            os.remove(os.path.join(path, item))
+
 if __name__ == "__main__":
     path_origin = r'/work/irlin355_1/gratienj/BigData/DigitalSandBox/Data/TimeSeries/Lacq/Jour_1'
     path_destination = r'/work/irlin355_1/gratienj/BigData/DigitalSandBox/Data/TimeSeries/Lacq/Jour_1_DT'
