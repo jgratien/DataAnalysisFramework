@@ -161,6 +161,12 @@ conda install -c conda-forge -n timeseries_influxdb kafka-python
 conda install -c pdrops -n timeseries_influxdb influxdb
 ```
 
+### Environnement timeseries_warp10
+```bash
+conda create --name timeseries_warp10 --clone timeseries_base
+conda install -c conda-forge -n timeseries_warp10 kafka-python
+conda install -n timeseries_warp10 py4j
+```
 ## Utilisation Jupyter avec environment timeseries
 
 Pour utiliser l'environment timeseries dans Jupyter-lab il faut créer des kernels :
@@ -175,7 +181,7 @@ $ conda activate timeseries_mongodb
 
 $ conda activate timeseries_influxdb
 (timeseries_influxdb)$ conda install ipykernel
-(timeseries_influxdb)$ ipython kernel install --user --name=kernel_ts_mongodb
+(timeseries_influxdb)$ ipython kernel install --user --name=kernel_ts_influxdb
 (timeseries_influxdb)$ conda deactivate
 
 ```
