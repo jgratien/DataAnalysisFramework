@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
 from kafka import KafkaConsumer,TopicPartition
 
-import sys
-sys.path.append("../..")
-import tracer_utils
 import mongodb_utils
+import tracer_utils
 import json
 from opentracing_instrumentation.request_context import get_current_span, span_in_context
 import argparse
+from cerberus import Validator
 
 def consumer_single_collection(topic):
     consumer = KafkaConsumer(bootstrap_servers='localhost:9092')
@@ -15,7 +13,7 @@ def consumer_single_collection(topic):
     consumer.assign([tp])
     consumer.seek_to_end(tp)
     lastOffset = consumer.position(tp)
-    print(lastOffset)
+    #print(lastOffset)
     consumer.seek_to_beginning(tp) 
     #end
     list_data=[]
@@ -26,11 +24,12 @@ def consumer_single_collection(topic):
                 msg = message.value.decode()
                 list_data.append(msg)
                 if message.offset == lastOffset - 1:
-                    print(message.offset)
+                    #print(message.offset)
                     break
             consumer.close()
             #print(list_data[0])
             list_data.append('0:;;43.41266;-0.641605;91.6;34.2;1.015;14.6;87.1;323.6;1.7;324.3;;999;0;0;0;0;0;0;0;0;0;0;0;0;0')
+            print(str(len(list_data))+ " data fetched from topic : "+topic)
             new_data = str_to_dict(list_data)
             return new_data
         
@@ -44,12 +43,11 @@ def str_to_dict(list_data):
           'HP_Delta_iCH4_30s','HP_Delta_iCH4_2min','HP_Delta_iCH4_5min']
     new_dict=[]
     for item in list_data:
-        print("INFO:",item)
         info=item.split(":",1)[1].split(";")
         dict_item ={col[i]:info[i] for i in range(len(col))}
-        if check_dict(dict_item) :
-            new_dict.append(dict_item)
-    verify_empty_str(new_dict)
+        new_dict.append(dict_item)
+    #verify_empty_str(new_dict)
+    clean_data(new_dict)
     return new_dict
 
 def verify_empty_str(list_dict):
@@ -65,26 +63,44 @@ def verify_empty_str(list_dict):
             if item.get(col[i]):
                 continue
             else:
-                #print("line: ",index,", position: ",i, ", require ",col[i])        
-                print("line: ",index,", position: ",i, ", require ")        
-        
-def check_dict(dict_item):
-    col= ['Heure','Temps écoulé','Latitude','Longitude',
-          'Altitude','Head_Rel_True North','Pressure',
-          'Temperature','Humidity','MDA Wnd Dir','MDA Wnd Speed',
-          'MWD Wind Dir','MWD Wind Speed','CavityPressure',
-          'CavityTemp','CH4','CH4_dry','C2H6','C2H6_dry',
-          '13CH4','H2O','CO2','C2C1Ratio','Delta_iCH4_Raw',
-          'HP_Delta_iCH4_30s','HP_Delta_iCH4_2min','HP_Delta_iCH4_5min']        
-    for i in range(len(col)) :
-        if dict_item.get(col[i]):
-            continue
-        else:
-            #print("line: ",index,", position: ",i, ", require ",col[i])        
-            print("DICT ERROR position: ",i, "empty ")        
-            return False
-    return True 
-
+                print("line: ",index,", position: ",i, ", require ",col[i])        
+def clean_data(data):
+    schema =  {
+    "Heure":{'type': 'string','required': True,'empty': False},
+    "Temps écoulé":{'type': 'string','required': True,'empty': False},
+    "Latitude":{'type': 'string','required': True,'empty': False},
+    "Longitude":{'type': 'string','required': True,'empty': False},
+    "Altitude":{'type': 'string','required': True,'empty': False},
+    "Head_Rel_True North":{'type': 'string','required': True,'empty': False},
+    "Pressure":{'type': 'string','required': True,'empty': False},
+    "Temperature":{'type': 'string','required': True,'empty': False},
+    "Humidity":{'type': 'string','required': True,'empty': False},
+    "MDA Wnd Dir":{'type': 'string','required': True,'empty': False},
+    "MDA Wnd Speed":{'type': 'string','required': True,'empty': False},
+    "MWD Wind Dir":{'type': 'string','required': True,'empty': False},
+    "MWD Wind Speed":{'type': 'string','required': True,'empty': False},
+    "CavityPressure":{'type': 'string','required': True,'empty': False},    
+    "CavityTemp":{'type': 'string','required': True,'empty': False},
+    "CH4":{'type': 'string','required': True,'empty': False},
+    "CH4_dry":{'type': 'string','required': True,'empty': False},
+    "C2H6":{'type': 'string','required': True,'empty': False},
+    "C2H6_dry":{'type': 'string','required': True,'empty': False},
+    "13CH4":{'type': 'string','required': True,'empty': False},
+    "H2O":{'type': 'string','required': True,'empty': False},
+    "CO2":{'type': 'string','required': True,'empty': False},
+    "C2C1Ratio":{'type': 'string','required': True,'empty': False},
+    "Delta_iCH4_Raw":{'type': 'string','required': True,'empty': False},
+    "HP_Delta_iCH4_30s":{'type': 'string','required': True,'empty': False},
+    "HP_Delta_iCH4_2min":{'type': 'string','required': True,'empty': False},
+    "HP_Delta_iCH4_5min":{'type': 'string','required': True,'empty': False}
+    }
+    v = Validator(schema)
+    for index,item in enumerate(data,start=0):
+        res = v.validate(item)
+        if (res == False):
+            print("corrupt data in line :",index,", error : ",v.errors)
+            del data[index] 
+            
 def insert_bulk(list_data,collection):
     with tracer.start_span('insert_bulk',child_of=get_current_span()) as span:
         span.set_tag('mongodb','operation:insert_many')
@@ -200,7 +216,7 @@ def main():
     query_dict=json.loads(query_string)
     new_value=json.loads(value)    
     
-    tracer = tracer_utils.init_tracer(tracer_name)
+    tracer = tracer_utils.init_tracer(tracer_name) 
     client = mongodb_utils.mongodb_connect(domain, port)
     col=client.test[collection]
 
