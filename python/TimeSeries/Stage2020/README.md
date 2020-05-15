@@ -566,9 +566,7 @@ avec anaconda :
 
 
 # Evaluation de Warp10
-
 ## Installation et configuraion
-
 ```bash
 wget https://dl.bintray.com/senx/generic/io/warp10/warp10/2.4.0/warp10-2.4.0.tar.gz
 tar xfvz warp10-2.4.0.tar.gz
@@ -683,6 +681,7 @@ Loaded 1 GTS in 36.1916 ms
 2020-04-27T16:40:33,979 main INFO  sdk.AbstractWarp10Plugin - LOADED plugin 'io.warp10.plugins.py4j.Py4JWarp10Plugin'
 #### standalone.endpoint /127.0.0.1:9090
 ```
+
 # Évaluation de KairosDB
 ## Installation 
 Télécharger l'archive de kairosdb sur la [page officiel](https://github.com/kairosdb/kairosdb/releases) et le mettre dans le répertoire souhaité pour lancer kairosdb selon les commands suivants : 
@@ -708,8 +707,8 @@ Pour exécuter KairosDB en tant que type de processus d'arrière-plan :
 ```bash
 > ./kairosdb.sh start
 ```
-# Évaluation de M3DB
 
+# Évaluation de M3DB
 ## Installation
 Comme l'installation de M3 est basée sur la langue GO, il faut d'abord installer la langue go sur l'ordinateur.
 
