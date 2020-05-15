@@ -6,6 +6,7 @@
 * [Préparation des donnnées](#préparation-des-données)
 * [Évaluation de MongoDB](#evaluation-de-mongodb)
 * [Évaluation de InfluxDB](#evaluation-de-influxdb)
+* [Évaluation de KairosDB](#evaluation-de-kairosdb)
 * [Évaluation de M3DB](#evaluation-de-m3db)
 * [Validation des données](#validation-des-données)
 * [Visualisation des données](#visualisation-des-données)
@@ -634,9 +635,78 @@ Ici la valeur de token est écrite dans le fichier `$WARP10_HOME/etc/initial.tok
 * Connection #0 to host 127.0.0.1 left intact
 ```
 
-## Installation des dépendences
-Pour manipuler la base de warp10 en python, il est nécessaire d'installer et configurer des extensions.
+## Installation et configuration des dépendences
 
+### Installation du pyj4
+Pour manipuler la base de warp10 en python, il est nécessaire d'installer et configurer des extensions.<br>
+A'abord activer l'environnement timeseries_warp10 : 
+```bash
+> conda activate timeseries_warp10
+```
+Vérifier les packages installés dans cette environnement : 
+```bash
+> conda list -n timeseries_warp10
+```
+Si le plugin pyj4 n'est pas encore installé : 
+```
+>conda install -n timeseries_warp10 py4j
+```
+### Configuration
+Après l'installation du `Pyj4`, aller dans le répertoire de config `warp10-2.4.0/etc/conf.d`.
+Ajouter la ligne suivante dans le fichier `10-egress.conf`:
+```
+egress.clients.expose = true
+```
+Ajouter la ligne suivante dans le fichier `80--plugins.conf`:
+```
+warp10.plugin.py4j = io.warp10.plugins.py4j.Py4JWarp10Plugin
+```
+Aller dans le répertoire `warp10-2.4.0/etc/log4j.properties`, ajouter les lignes suivantes : 
+```
+log4j.additivity.io.warp10.warp.sdk.AbstractWarp10Plugin = false
+log4j.logger.io.warp10.warp.sdk.AbstractWarp10Plugin = INFO, stdout
+log4j.additivity.io.warp10.script.WarpScriptLib = false
+log4j.logger.io.warp10.script.WarpScriptLib = INFO, stdout
+```
+
+### Vérification 
+Redémarrer le service de warp10 et aller dans le répertoire `warp10-2.4.0/logs`
+Vérifier si les informations de `py4j.Py4JWarp10Plugin` sont disponibles dans le fichier `warp10.log` comme suivant : 
+```
+########[ Initialized with 1000 time units per millisecond ]########
+2020-04-27 16:40:33.215:INFO:iwsjoejs.Server:jetty-8.y.z-SNAPSHOT
+2020-04-27 16:40:33.274:INFO:iwsjoejs.AbstractConnector:Started SelectChannelConnector@127.0.0.1:50600
+2020-04-27T16:40:33,304 main WARN  script.WarpFleetMacroRepository - No validator macro, default macro will reject all URLs.
+REPORT secret not set, using '710bbc1f-c511-4036-8035-7f70ed80f6ea'.
+Loaded 1 GTS in 36.1916 ms
+2020-04-27T16:40:33,979 main INFO  sdk.AbstractWarp10Plugin - LOADED plugin 'io.warp10.plugins.py4j.Py4JWarp10Plugin'
+#### standalone.endpoint /127.0.0.1:9090
+```
+# Évaluation de KairosDB
+## Installation 
+Télécharger l'archive de kairosdb sur la [page officiel](https://github.com/kairosdb/kairosdb/releases) et le mettre dans le répertoire souhaité pour lancer kairosdb selon les commands suivants : 
+```bash
+> wget https://github.com/kairosdb/kairosdb/releases/download/v1.2.2/kairosdb-1.2.2-1.tar.gz
+> tar -xfv kairosdb-1.2.2-1.tar.gz
+```
+## Configuration 
+Le fichier de configuration est `conf/kairosdb.properties`. La porte réservée de kairosdb par défaut est 8080, qui est déjà occupée
+par l'autre logiciel dans mon pc. <br>
+Pour changer la porte il faut corriger les valeurs des paramètres suivantes :  
+```
+kairosdb.jetty.port=9080
+kairosdb.datastore.remote.remote_url=http://10.92.1.41:9080
+```
+## Test l'installation
+Aller dans le répertoire `bin` pour utiliser le script `kairosdb.sh` afin de de
+Pour démarrer KairosDB et exécuter dans le type de premier plan :
+```bash
+> ./kairosdb.sh run
+```
+Pour exécuter KairosDB en tant que type de processus d'arrière-plan :
+```bash
+> ./kairosdb.sh start
+```
 # Évaluation de M3DB
 
 ## Installation
