@@ -22,6 +22,15 @@ def mongodb_connect(domain, port):
         client = None
     return client
 
+def get_all_data(client,db_name,coll_name,scheme):
+    db = client[db_name]
+    collection = db[coll_name]
+    data_list=[]
+    for d in collection.find():
+        data_list.append(d)
+    print(len(data_list), " documents found")
+    return data_list
+
 def init_tracer(service):
     logging.getLogger('').handlers = []
     logging.basicConfig(format='%(message)s', level=logging.DEBUG)    
