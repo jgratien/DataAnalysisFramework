@@ -1,0 +1,3 @@
+% for d in data:
+${d['timestamp']}// ${d['class']}{Tag=${d['tagname']}} ${chr(39)+d['value']+chr(39)}
+% endfor
