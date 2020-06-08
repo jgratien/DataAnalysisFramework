@@ -31,6 +31,12 @@ def get_all_data(client,db_name,coll_name,scheme):
     print(len(data_list), " documents found")
     return data_list
 
+def insert_many_docs(client,db_name,coll_name,doc_list):
+    db = client[db_name]
+    collection = db[coll_name]
+    doc_id = collection.insert_many(doc_list)
+    return doc_id
+
 def init_tracer(service):
     logging.getLogger('').handlers = []
     logging.basicConfig(format='%(message)s', level=logging.DEBUG)    

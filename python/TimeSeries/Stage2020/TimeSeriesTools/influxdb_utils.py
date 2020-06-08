@@ -38,3 +38,31 @@ def get_all_data(client,db_name,coll_name,scheme):
         #print(cols[1],',',date,',',str_value)
         id += 1
     return results
+
+def create_database(client,db_name):
+    client.create_database(db_name)
+
+def delete_database(client,db_name):
+    client.drop_database(db_name)
+
+def test_database_exists(client,db_name):
+    return db_name in client.get_list_database()
+
+def insert_many_docs(client,db_name, coll_name,doc_list):
+    if not test_database_exists(client,db_name):
+        print(f"DATBASE {db_name} does not exist, will be created")
+        create_database(client,db_name)
+        
+    client.switch_database(db_name)
+    json_body = []
+    for doc in doc_list:
+        json_body.append({"measurement": coll_name,
+                          "time": doc[0],
+                          "fields": {"data": doc[1]} })
+        #print('JSON BODY',doc[0],doc[1])
+    status = client.write_points(json_body, time_precision='ms',protocol=u'json')
+    if status == True :
+        print(f"{len(doc_list)} documents have been inserted")
+    else:
+        print("Error while inserting documents")
+    return status
