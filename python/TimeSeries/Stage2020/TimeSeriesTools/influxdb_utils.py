@@ -46,7 +46,11 @@ def delete_database(client,db_name):
     client.drop_database(db_name)
 
 def test_database_exists(client,db_name):
-    return db_name in client.get_list_database()
+    for db in client.get_list_database():
+        print(db_name,db['name'])
+        if db_name == db['name']:
+            return True
+    return False
 
 def insert_many_docs(client,db_name, coll_name,doc_list):
     if not test_database_exists(client,db_name):
@@ -58,6 +62,27 @@ def insert_many_docs(client,db_name, coll_name,doc_list):
     for doc in doc_list:
         json_body.append({"measurement": coll_name,
                           "time": doc[0],
+                          "fields": {"data": doc[1]} })
+        #print('JSON BODY',doc[0],doc[1])
+    status = client.write_points(json_body, time_precision='ms',protocol=u'json')
+    if status == True :
+        print(f"{len(doc_list)} documents have been inserted")
+    else:
+        print("Error while inserting documents")
+    return status
+
+
+def insert_many_docs_with_tags(client,db_name, coll_name,tags,doc_list):
+    if not test_database_exists(client,db_name):
+        print(f"DATBASE {db_name} does not exist, will be created")
+        create_database(client,db_name)
+        
+    client.switch_database(db_name)
+    json_body = []
+    for doc in doc_list:
+        json_body.append({"measurement": coll_name,
+                          "time": doc[0],
+                          "tags": tags,
                           "fields": {"data": doc[1]} })
         #print('JSON BODY',doc[0],doc[1])
     status = client.write_points(json_body, time_precision='ms',protocol=u'json')
