@@ -39,6 +39,31 @@ def get_all_data(client,db_name,coll_name,scheme):
         id += 1
     return results
 
+def get_data_select_by_tags(client,db_name,coll_name,tags,scheme):
+    
+    tag_query = { 'source' : coll_name }
+    tagname = 'TAG'
+    for i,(k,v) in enumerate(tags.items()):
+        tag_query[k] = v
+        tagname = tagname+'.'+v
+    
+    cols = [ k for k in scheme.keys()]
+    
+    client.switch_database(db_name)
+    results = client.query(f'SELECT * FROM "{db_name}"."autogen"."{coll_name}"',epoch='ms')
+    
+    points = results.get_points(measurement=coll_name, tags=tags)
+    results = []
+    id = 0
+    for point in points:
+        date = point['time']
+        str_value = str(id)+';'+str(date)+';'+tagname+';'+point['data']
+        values = str_value.split(';')
+        results.append({ cols[i]:values[i] for i in range(len(cols))})
+        #print(cols[1],',',date,',',str_value)
+        id += 1
+    return results
+
 def create_database(client,db_name):
     client.create_database(db_name)
 

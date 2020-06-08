@@ -31,6 +31,20 @@ def get_all_data(client,db_name,coll_name,scheme):
     print(len(data_list), " documents found")
     return data_list
 
+def get_data_select_by_tags(client,db_name,coll_name,tags,scheme):
+    db = client[db_name]
+    collection = db[coll_name]
+    for i,(k,v) in enumerate(tags.items()):
+        if i==0:
+            tagname = v
+        else:
+            tagname = tagname+'.'+v
+    data_list=[]
+    for d in collection.find({ 'tagname' : tagname }):
+        data_list.append(d)
+    print(len(data_list), " documents found")
+    return data_list
+
 def insert_many_docs(client,db_name,coll_name,doc_list):
     db = client[db_name]
     collection = db[coll_name]
