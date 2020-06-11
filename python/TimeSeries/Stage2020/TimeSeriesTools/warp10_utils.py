@@ -140,7 +140,7 @@ def delete_collection(warp10db_server, db_name,coll_name):
     response = requests.get(query, headers=db_info.write_headers)
     return response.text
 
-def get_all_docs(warp10db_server,db_name,coll_name):
+def get_all_data(warp10db_server,db_name,coll_name):
     from mako.template import Template
     t = Template(filename=os.path.join(db_info.template_path,'fetch_coll.txt'))
     print("REQUEST:",t.render(token=self.db_info.read_token, coll_name=coll_name))
@@ -154,10 +154,10 @@ def get_all_docs(warp10db_server,db_name,coll_name):
         print(response.text)
         return []
 
-def get_docs_select_by_tags(warp10db_server, db_name, coll_name, tags):
+def get_data_select_by_tags(warp10db_server, db_name, coll_name, tags,scheme):
     from mako.template import Template
     t = Template(filename=os.path.join(db_info.template_path,'fetch_select_coll.txt'))
-    print("REQUEST:",t.render(token=db_info.read_token, coll_name=coll_name, tags=tags))
+    #print("REQUEST:",t.render(token=db_info.read_token, coll_name=coll_name, tags=tags))
     response = requests.post(warp10db_server + "/api/v0/exec",
                                     data=t.render(token=db_info.read_token, coll_name=coll_name, tags=tags))
 
