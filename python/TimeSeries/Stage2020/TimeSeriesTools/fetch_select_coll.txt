@@ -1,0 +1,11 @@
+//store read token in a variable
+'${token}' 'Rt' STORE
+[\
+  $Rt \
+  '${coll_name}'
+  { \
+% for i,(k,v) in enumerate(tags.items()):
+'${k}' '${v}' \
+% endfor
+} NOW MINLONG 1 + \
+] FETCH
