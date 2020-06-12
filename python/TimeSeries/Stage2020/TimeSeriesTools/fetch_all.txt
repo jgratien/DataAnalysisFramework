@@ -1,0 +1,5 @@
+//store read token in a variable
+'${token}' 'myreadtoken' STORE
+
+//fetch the most recent point of every GTS this token can access
+[ $myreadtoken '~.*' {} NOW -1 ] FETCH

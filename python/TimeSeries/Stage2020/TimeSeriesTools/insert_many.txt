@@ -1,0 +1,11 @@
+% for d in datapoint['values']:
+${d[0]}/${datapoint['latitude']}:${datapoint['longitude']}/${datapoint['altitude']} ${datapoint['class']}{ \
+% for i,(k,v) in enumerate(datapoint['tags'].items()):
+%   if i ==0:
+${     k}=${       v} \
+%   else:
+,${      k}=${       v} \
+%   endif
+% endfor
+} '${        d[1]}'
+% endfor

@@ -72,7 +72,7 @@ def delete_database(client,db_name):
 
 def test_database_exists(client,db_name):
     for db in client.get_list_database():
-        print(db_name,db['name'])
+        #print(db_name,db['name'])
         if db_name == db['name']:
             return True
     return False
@@ -90,9 +90,7 @@ def insert_many_docs(client,db_name, coll_name,doc_list):
                           "fields": {"data": doc[1]} })
         #print('JSON BODY',doc[0],doc[1])
     status = client.write_points(json_body, time_precision='ms',protocol=u'json')
-    if status == True :
-        print(f"{len(doc_list)} documents have been inserted")
-    else:
+    if status == False :
         print("Error while inserting documents")
     return status
 
@@ -111,8 +109,6 @@ def insert_many_docs_with_tags(client,db_name, coll_name,tags,doc_list):
                           "fields": {"data": doc[1]} })
         #print('JSON BODY',doc[0],doc[1])
     status = client.write_points(json_body, time_precision='ms',protocol=u'json')
-    if status == True :
-        print(f"{len(doc_list)} documents have been inserted")
-    else:
+    if status == False :
         print("Error while inserting documents")
     return status
