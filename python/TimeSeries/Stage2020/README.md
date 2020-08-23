@@ -824,3 +824,45 @@ Schéma de validation :
 | chart-studio | 1.0.0 |
 | plotly | 4.5.4 |
 | retrying | 1.3.3 |
+
+
+```
+{
+    "timestamp" : "01/01/2019 09:15:12",
+    "tagname" : "CRY.CENTRALE_SOLAIRE.CRY_act_prod_pow",
+    "value" : "1.000000000", 
+    "quality" : "100.0" 
+}
+```
+```
+[{'name': 'CRY_CENTRALE_SOLAIRE_CRY_act_prod_pow',
+  'datapoints': [[1514764800000, 1.000000000]],
+  'tags': {'source': 'CRY-product',
+   'column': 'value'},
+  'type': 'double'}]
+  
+ [{'name': 'CRY_CENTRALE_SOLAIRE_CRY_act_prod_pow',
+  'datapoints': [[1514764800000, 100.0]],
+  'tags': {'source': 'CRY-product',
+   'column': 'quality'},
+  'type': 'double'}]
+```
+```
+[{'measurement' : 'CRY_CENTRALE_SOLAIRE_CRY_act_prod_pow',
+  'time' : '2019-01-01 09:15:12',
+  'fields' : {
+    'value' : 1.000000000,
+    'quality' : 100.0}}]
+```
+```
+{'class' : 'act_prod_pow',
+  'tagname' : 'CRY_CENTRALE_SOLAIRE',
+  'timestamp' : 1514766000000000,
+  'value' : 1.000000000,
+  'quality' : 100.0
+ }
+```
+```
+1514764800000000// value{Tag=CRY_CENTRALE_SOLAIRE, Rowdata=historian-CRY-production.csv} 1.000000000
+1514764800000000// quality{Tag=CRY_CENTRALE_SOLAIRE, Rowdata=historian-CRY-production.csv} 100.0
+```
