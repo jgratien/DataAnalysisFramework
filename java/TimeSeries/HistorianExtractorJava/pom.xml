@@ -14,7 +14,7 @@
         <jacob.version>1.18</jacob.version>
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <guava.version>25.0-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <junit.version>4.12</junit.version>
         <arg4j.version>2.33</arg4j.version>
         <snakeyml.version>1.23</snakeyml.version>
