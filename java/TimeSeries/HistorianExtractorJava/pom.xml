@@ -17,7 +17,7 @@
         <guava.version>25.0-jre</guava.version>
         <junit.version>4.12</junit.version>
         <arg4j.version>2.33</arg4j.version>
-        <snakeyml.version>1.23</snakeyml.version>
+        <snakeyml.version>1.26</snakeyml.version>
         <h2.version>1.4.197</h2.version>
         <hikaricp.version>3.3.1</hikaricp.version>
         <dbutils.version>1.7</dbutils.version>
